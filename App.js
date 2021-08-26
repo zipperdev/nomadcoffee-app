@@ -1,36 +1,49 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { AppearanceProvider } from "react-native-appearance";
+import { NavigationContainer } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ThemeProvider } from "styled-components/native";
+import { ApolloProvider } from "@apollo/client";
 import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
-import { StatusBar } from "expo-status-bar";
+import MainNav from "./navigators/MainNav";
+import { darkTheme, lightTheme, navigationTheme } from "./styles";
+import { authenticatedVar, isLoggedInVar, AUTHENTICATION, client, logUserOut } from "./apollo";
+import { light } from "./shared";
 
-export default function App() {
+function App() {
     const [ loading, setLoading ] = useState(true);
-    const preload = () => {
+    const preload = async () => {
+        const token = await AsyncStorage.getItem(AUTHENTICATION);
+        if (token) {
+            isLoggedInVar(true);
+            authenticatedVar(token);
+        };
         const fonts = [Ionicons.font];
-        const images = [require("./assets/logo.png")];
+        const images = [require("./assets/nullAvatar.png"), require("./assets/logo_black.png"), require("./assets/logo_white.png")];
         const fontPromise = fonts.map(font => Font.loadAsync(font));
         const imagePromise = images.map(image => Asset.loadAsync(image));
         return Promise.all([ ...fontPromise, ...imagePromise ]);
     };
     if (loading) {
-        return <AppLoading startAsync={preload} onFinish={() => setLoading(false)} onError={console.warn} />
+        return <AppLoading
+            startAsync={preload}
+            onFinish={() => setLoading(false)}
+            onError={console.warn}
+        />;
     };
-    return (
-        <View style={styles.container}>
-            <Text>Nomad X Coffee Application</Text>
-            <StatusBar style="auto" />
-        </View>
-    );
+    return <ApolloProvider client={client}>
+        <AppearanceProvider>
+            <ThemeProvider theme={light ? lightTheme : darkTheme}>
+                <NavigationContainer theme={navigationTheme}>
+                    <MainNav />
+                </NavigationContainer>
+            </ThemeProvider>
+        </AppearanceProvider>
+    </ApolloProvider>;
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, 
-        backgroundColor: "#fff", 
-        alignItems: "center", 
-        justifyContent: "center"
-    }
-});
+
+export default App;
