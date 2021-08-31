@@ -11,7 +11,7 @@ export default function AuthNav() {
             headerBackTitleVisible: false, 
             headerTitle: false, 
             headerTransparent: true, 
-            headerTintColor: light ? "#000000" : "#FFFFFF", 
+            headerTintColor: light ? "#000000" : "#ffffff", 
             headerShown: false
         }}>
             <Stacks.Screen name="Login" component={Login} />
