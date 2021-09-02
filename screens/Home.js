@@ -46,7 +46,7 @@ export default function Home() {
             onEndReachedThreshold={0.02}
             onEndReached={() => fetchMore({
                 variables: {
-                    lastId: data?.seeCoffeeShops[0].id
+                    lastId: data?.seeCoffeeShops[data?.seeCoffeeShops.length - 1].id
                 }
             })}
             refreshing={refreshing}
