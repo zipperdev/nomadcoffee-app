@@ -21,7 +21,7 @@ const ButtonText = styled.Text`
 
 function AuthButton({ onPress, disabled, text, loading }) {
     return <Button disabled={disabled} onPress={onPress}>
-        {loading ? <ActivityIndicator color="#FFFFFF" /> : <ButtonText>{text}</ButtonText>}
+        {loading ? <ActivityIndicator color="#ffffff" /> : <ButtonText>{text}</ButtonText>}
     </Button>;
 };
 

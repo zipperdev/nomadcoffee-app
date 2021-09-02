@@ -1,8 +1,10 @@
 import React from "react";
+import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useReactiveVar } from "@apollo/client";
 import { Ionicons } from "@expo/vector-icons";
 import StackNavFactory from "../components/nav/StackNavFactory";
+import { useUser } from "../hooks/useUser";
 import { isLoggedInVar } from "../apollo";
 import { light } from "../shared";
 import AuthNav from "./AuthNav";
@@ -10,6 +12,7 @@ import AuthNav from "./AuthNav";
 const Tabs = createBottomTabNavigator();
 
 export default function MainNav() {
+    const { data } = useUser();
     const isLoggedIn = useReactiveVar(isLoggedInVar);
     return <Tabs.Navigator screenOptions={{
             tabBarHideOnKeyboard: true, 
@@ -49,7 +52,7 @@ export default function MainNav() {
                 headerTintColor: light ? "#000000" : "#FFFFFF", 
                 headerShown: false
             }), 
-            tabBarIcon: ({ focused, color }) => <Ionicons name={isLoggedIn ? (focused ? "person" : "person-outline") : (focused ? "log-in" : "log-in-outline")} color={color} size={isLoggedIn ? 22 : 26} />
+            tabBarIcon: ({ focused, color }) => isLoggedIn ? <Image source={data?.me?.avatarURL ? { uri: data?.me?.avatarURL } : require("../assets/nullAvatar.png")} style={{ height: 22, width: 22, borderRadius: 22, ...(focused && { borderColor: light ? "#101010" : "#fafafa", borderWidth: 1 }) }} /> : <Ionicons name={focused ? "log-in" : "log-in-outline"} color={color} size={26} />
         }}>
             {isLoggedIn ? () => <StackNavFactory screenName="Profile" /> : AuthNav}
         </Tabs.Screen>

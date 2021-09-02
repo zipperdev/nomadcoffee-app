@@ -13,7 +13,7 @@ const Container = styled.View`
 const Avatar = styled.Image`
     width: 150px;
     height: 150px;
-    margin-top: 40px;
+    margin-top: 100px;
 `;
 
 const Username = styled.Text`

@@ -10,7 +10,7 @@ import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
 import MainNav from "./navigators/MainNav";
 import { darkTheme, lightTheme, navigationTheme } from "./styles";
-import { authenticatedVar, isLoggedInVar, AUTHENTICATION, client, logUserOut } from "./apollo";
+import { authenticatedVar, isLoggedInVar, AUTHENTICATION, client } from "./apollo";
 import { light } from "./shared";
 
 function App() {

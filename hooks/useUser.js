@@ -23,22 +23,21 @@ const SEE_PROFILE_QUERY = gql`
 `;
 
 export const useUser = () => {
-    let id = null;
+    const dumpToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkdW1wIjoiZmlsZSJ9.dzqoK0vJQPSWshv4YEkpDd4UNjGRb5BYoBUV6p3H9Co";
     const token = useReactiveVar(authenticatedVar);
     const isLoggedIn = useReactiveVar(isLoggedInVar);
-    if (token) {
-        const decodedToken = jwtDecode(token);
-        id = decodedToken.id;
-    };
+    const decodedToken = jwtDecode(token ? token : dumpToken);
     const { data } = useQuery(SEE_PROFILE_QUERY, {
-        skip: !token, 
+        skip: !token || !decodedToken?.id, 
         variables: {
-            id
+            id: decodedToken.id
         }
     });
     useEffect(() => {
         if (data?.seeProfile === null) {
-            return logUserOut();
+            return {
+                data: null
+            };
         };
     }, [data]);
     if (token && isLoggedIn) {
@@ -50,6 +49,8 @@ export const useUser = () => {
             data: null
         };
     } else {
-        return logUserOut();
+        return {
+            data: null
+        };
     };
 };

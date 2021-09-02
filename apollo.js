@@ -40,25 +40,62 @@ const uploadLink = createUploadLink({
     uri: API_URI
 });
 
+const coffeeShopMerge = (existing, incoming, { args }) => {
+    if (args.hasOwnProperty("lastId") && !!args.lastId) {
+        const merged = existing ? existing.slice(0) : [];
+        const filteredMerged = merged.filter((value, index) => merged.indexOf(value) === index);
+        const filteredIncoming = incoming.filter(value => !filteredMerged.some(item => item.__ref === value.__ref));
+        return [ ...filteredMerged, ...filteredIncoming ];
+    } else if (existing) {
+        const merged = existing ? existing.slice(0) : [];
+        const filteredMerged = merged.filter((value, index) => merged.indexOf(value) === index);
+        const filteredIncoming = incoming.filter(value => !filteredMerged.some(item => item.__ref === value.__ref));
+        return [ ...filteredMerged, ...filteredIncoming ];
+    } else {
+        return [ ...incoming ];
+    };
+};
 export const client = new ApolloClient({
     link: ApolloLink.from([ authLink, uploadLink ]), 
     cache: new InMemoryCache({
         typePolicies: {
             seeCoffeeShops: {
-                keyFields: false, 
-                merge: (existing, incoming, { args }) => {
+                keyArgs: false, 
+                merge: coffeeShopMerge
+            }, 
+            search: {
+                keyArgs: false, 
+                merge(existing, incoming, { args })  {
+                    const coffeeShopExisting = existing?.coffeeShops;
+                    const userExisting = existing?.users;
+                    const coffeeShopIncoming = incoming?.coffeeShops;
+                    const userIncoming = incoming?.users;
                     if (args.hasOwnProperty("lastId") && !!args.lastId) {
-                        const merged = existing ? existing.slice(0) : [];
-                        const filteredMerged = merged.filter((value, index) => merged.indexOf(value) === index);
-                        const filteredIncoming = incoming.filter(value => !filteredMerged.some(item => item.__ref === value.__ref));
-                        return [ ...filteredMerged, ...filteredIncoming ];
-                    } else if (existing) {
-                        const merged = existing ? existing.slice(0) : [];
-                        const filteredMerged = merged.filter((value, index) => merged.indexOf(value) === index);
-                        const filteredIncoming = incoming.filter(value => !filteredMerged.some(item => item.__ref === value.__ref));
-                        return [ ...filteredMerged, ...filteredIncoming ];
+                        const coffeeShopMerged = coffeeShopExisting ? coffeeShopExisting.slice(0) : [];
+                        const userMerged = userExisting ? userExisting.slice(0) : [];
+                        const coffeeShopFilteredMerged = coffeeShopMerged.filter((value, index) => coffeeShopMerged.indexOf(value) === index);
+                        const userFilteredMerged = userMerged.filter((value, index) => userMerged.indexOf(value) === index);
+                        const coffeeShopFilteredIncoming = coffeeShopIncoming.filter(value => !coffeeShopFilteredMerged.some(item => item.__ref === value.__ref));
+                        const userFilteredIncoming = userIncoming.filter(value => !userFilteredMerged.some(item => item.__ref === value.__ref));
+                        return {
+                            coffeeShops: [
+                                ...coffeeShopFilteredMerged, 
+                                ...coffeeShopFilteredIncoming
+                            ], 
+                            users: [
+                                ...userFilteredMerged, 
+                                ...userFilteredIncoming
+                            ]
+                        };
                     } else {
-                        return [ ...incoming ];
+                        return {
+                            coffeeShops: [
+                                ...coffeeShopIncoming
+                            ], 
+                            users: [
+                                ...userIncoming
+                            ]
+                        };
                     };
                 }
             }

@@ -10,7 +10,8 @@ export const lightTheme = {
     weightColor: "#303030", 
     accent: "#0095f6", 
     focusBorderColor: "rgb(38, 38, 38)", 
-    borderColor: "rgb(219, 219, 219)"
+    borderColor: "rgb(219, 219, 219)", 
+    transparent: "rgba(0, 0, 0, 0.05)"
 };
 
 export const darkTheme = {
@@ -22,7 +23,8 @@ export const darkTheme = {
     weightColor: "#e0e0e0", 
     accent: "#0095f6", 
     focusBorderColor: "rgb(80, 80, 80)", 
-    borderColor: "rgb(28, 28, 28)"
+    borderColor: "rgb(28, 28, 28)", 
+    transparent: "rgba(255, 255, 255, 0.15)"
 };
 
 export const navigationTheme = {

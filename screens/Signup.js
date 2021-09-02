@@ -4,7 +4,6 @@ import { gql, useMutation } from "@apollo/client";
 import AuthLayout from "../components/auth/AuthLayout";
 import AuthButton from "../components/auth/AuthButton";
 import { TextInput, ErrorText, ButtonErrorText } from "../components/auth/AuthShared";
-import { logUserIn } from "../apollo";
 import { light } from "../shared";
 
 const CREATE_ACCOUNT_MUTATION = gql`

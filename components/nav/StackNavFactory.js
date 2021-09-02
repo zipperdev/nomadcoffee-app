@@ -32,7 +32,13 @@ function StackNavFactory({ screenName }) {
                 <Stack.Screen name={"Search"} component={Search} />
             ) : null}
             {screenName === "Profile" ? (
-                <Stack.Screen name={"Profile"} component={Profile} />
+                <Stack.Screen name={"Profile"} options={{
+                    headerBackTitleVisible: false, 
+                    headerTitle: false, 
+                    headerTransparent: true, 
+                    headerTintColor: light ? "#000000" : "#ffffff", 
+                    headerShown: false
+                }} component={Profile} />
             ) : null}
     </Stack.Navigator>;
 };
