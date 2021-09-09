@@ -54,6 +54,7 @@ const MessageContainer = styled.View`
 `;
 
 const MessageText = styled.Text`
+    color: ${props => props.theme.fontColor};
     margin-top: 20px;
     font-size: 16px;
     font-weight: 700;
@@ -125,6 +126,7 @@ export default function Search({ navigation }) {
                                 refresh();
                             }}
                             style={{ width: "100%" }}
+                            contentContainerStyle={{ width: "100%" }}
                             showsVerticalScrollIndicator={false}
                             data={data?.search?.coffeeShops}
                             renderItem={renderCoffeeShop}

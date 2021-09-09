@@ -30,12 +30,14 @@ const Avatar = styled.Image`
 `;
 
 const Username = styled.Text`
+    color: ${props => props.theme.fontColor};
     font-size: 15px;
     font-weight: 700;
     margin-left: 10px;
 `;
 
 const CoffeeShopName = styled.Text`
+    color: ${props => props.theme.fontColor};
     right: 20px;
     font-size: 16px;
     font-weight: 700;
@@ -90,6 +92,7 @@ const Category = styled.View`
 `;
 
 const CategoryText = styled.Text`
+    color: ${props => props.theme.fontColor};
     font-weight: 700;
 `;
 

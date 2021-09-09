@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading";
+import { StatusBar } from "expo-status-bar";
 import MainNav from "./navigators/MainNav";
 import { darkTheme, lightTheme, navigationTheme } from "./styles";
 import { authenticatedVar, isLoggedInVar, AUTHENTICATION, client } from "./apollo";
@@ -35,6 +36,7 @@ function App() {
         />;
     };
     return <ApolloProvider client={client}>
+        <StatusBar style={light ? "dark" : "light"} />
         <AppearanceProvider>
             <ThemeProvider theme={light ? lightTheme : darkTheme}>
                 <NavigationContainer theme={navigationTheme}>

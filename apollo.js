@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ApolloClient, ApolloLink, InMemoryCache, makeVar } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { onError } from "@apollo/client/link/error";
 import { createUploadLink } from "apollo-upload-client";
 
 export const AUTHENTICATION =  "authentication";
@@ -39,6 +40,14 @@ const authLink = setContext((_, { headers }) => {
 const uploadLink = createUploadLink({
     uri: API_URI
 });
+const onErrorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+        console.log("GraphQL Error", graphQLErrors);
+    };
+    if (networkError) {
+        console.log("Network Error", networkError);
+    };
+});
 
 const coffeeShopMerge = (existing, incoming, { args }) => {
     if (args.hasOwnProperty("lastId") && !!args.lastId) {
@@ -56,7 +65,7 @@ const coffeeShopMerge = (existing, incoming, { args }) => {
     };
 };
 export const client = new ApolloClient({
-    link: ApolloLink.from([ authLink, uploadLink ]), 
+    link: ApolloLink.from([ authLink, onErrorLink, uploadLink ]), 
     cache: new InMemoryCache({
         typePolicies: {
             seeCoffeeShops: {
